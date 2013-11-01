@@ -25,6 +25,8 @@ var NBT_NAME_TYPE_FILE_SERVER_SERVICE = 0x20;
 var NBT_NAME_TYPE_DOMAIN_MASTER_BROWSER = 0x1B;
 var NBT_NODE_NAME_FLAGS_GROUP = 0x8000;
 var NBT_MESSAGE_FLAGS_RESPONSE = 0x8000;
+var NBT_MAX_RESPONSE_PACKET_SIZE = 9000;
+
 
         
 // ---------------------------------------------------------------------------
@@ -349,21 +351,26 @@ function nbtBroadcast(buf, sendToCallback) {
     });
 }
 
-// Return the IP for the requested name 
-function nbtNameSearch(name) {
-    // TODO - search for the given name
+// Return the IP for the requested name via the callback
+function nbtNameSearchForIP(name, callback) {
+    var lastIP;
     var nbtr = createNBTRequest(nameToNBTName(name), NBT_QUESTION_TYPE_NB, true);
     var buf = nbtr.serializeQuery();
     
+    // NB This can be called more than once for each broadcast
     function recvLoop(socketId) {
-        chrome.socket.recvFrom(socketId, MDNS_MAX_PACKET_SIZE, function (result) {
+        chrome.socket.recvFrom(socketId, NBT_MAX_RESPONSE_PACKET_SIZE, function (result) {
             if (result.resultCode >= 0) {
                 console.log("...nbtrl.recvFrom("+socketId+"): " + result.address + ":" + result.port);            
                 var nbtm = createNBTResponseMessage(result.data);
                 if (nbtm.flags & NBT_MESSAGE_FLAGS_RESPONSE) {
                     console.log('..response.records: ' + nbtm.answerRecords.length);
+                    if (lastIP != result.address) {
+                        lastIP = result.address;
+                        callback(result.address);
+                    }
                 }
-                recvLoop(socketId, deviceFoundCallback);
+                recvLoop(socketId);
             } else {
                 console.log("  nbtrl: Error: " + result.resultCode);
             }

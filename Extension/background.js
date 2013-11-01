@@ -1,4 +1,5 @@
 var SMB_APP_ID = 'fmeeghbannbbffmgkbjlihachbmkepbc';
+var port;
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
     console.log('inputChanged: ' + text);
@@ -13,8 +14,22 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
     console.log('inputEntered: ' + text);
     // nbtSearch(text);
     // alert('You just typed "' + text + '"');
-    chrome.runtime.sendMessage(SMB_APP_ID, {inputEntered: text}, function(response) {
-        console.log('response: ' + response.ip);
-    });
+
+    function onMsg(msg) {
+        console.log('response from app: ' + msg.ip);
+    }
+
+    if (!port) {
+        port = chrome.runtime.connect(SMB_APP_ID);
+        port.onMessage.addListener(onMsg);
+    }
+    
+    if (port) {
+        port.postMessage({inputEntered: text});
+    }
+
+    // chrome.runtime.sendMessage(SMB_APP_ID, {inputEntered: text}, function(response) {
+    //     console.log('response from app: ' + response.ip);
+    // });
  
  });
