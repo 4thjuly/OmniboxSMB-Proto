@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Omnibox SMB Support Extension",
+    "name": "SMB Server Name",
     "description": "To use, type 'smb' plus the name of a local SMB server in to the omnibox.",
     "version": "0.1",
     "background": {"scripts": ["background.js"]},
