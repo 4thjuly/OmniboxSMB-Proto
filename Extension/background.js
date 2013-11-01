@@ -17,6 +17,8 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
 
     function onMsg(msg) {
         console.log('response from app: ' + msg.ip);
+        var newUrl = 'http://' + msg.ip;
+        chrome.tabs.update({url: newUrl});
     }
 
     if (!port) {

@@ -6,7 +6,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
 chrome.runtime.onConnectExternal.addListener(function(port) {
     
     function onMsg(msg) {
-        console.log('ome: ' + msg.id);
+        console.log('ome: ' + msg);
         nbtNameSearchForIP(msg.inputEntered, onNameSearchCompleted);
     }
     
