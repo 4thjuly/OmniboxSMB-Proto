@@ -7,7 +7,7 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
     
     function onMsg(msg) {
         console.log('ome: ' + msg);
-        nbtNameSearchForIP(msg.inputEntered, onNameSearchCompleted);
+        nbtNameSearchForIP(msg.inputEntered.toUpperCase(), onNameSearchCompleted);
     }
     
     function onNameSearchCompleted(targetIP) {
@@ -18,25 +18,3 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
     port.onMessage.addListener(onMsg);
 });
 
-// chrome.runtime.onMessageExternal.addListener( function(request, sender, sendResponse) {
-    
-    
-//     function onNameSearchCompleted(targetIP) {
-//         console.log('onsc: ' + targetIP);
-//         sendResponse({ip: targetIP});
-//     }
-    
-//     console.log('ome: ' + sender.id);
-//     nbtNameSearchForIP(request.inputEntered, onNameSearchCompleted);
-    
-//     sendResponse({ip: 'this.is.a.test'});
-    
-//     // if (sender.id == blacklistedExtension)
-//     //     return;  // don't allow this extension access
-//     // else if (request.getTargetData)
-//     //     sendResponse({targetData: targetData});
-//     // else if (request.activateLasers) {
-//     //     var success = activateLasers();
-//     //     sendResponse({activateLasers: success});
-//     // }
-// });

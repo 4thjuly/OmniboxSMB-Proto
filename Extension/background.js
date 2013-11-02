@@ -1,4 +1,4 @@
-var SMB_APP_ID = 'fmeeghbannbbffmgkbjlihachbmkepbc';
+var SMB_APP_ID = 'aneecmhmlinnnmjlafjhckfcbfmecagk';
 var port;
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
