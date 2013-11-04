@@ -329,7 +329,8 @@ function nbtBroadcast(buf, sendToCallback) {
                     var prefixLen = adapters[i].prefixLength;
                     var broadcastIP = getBroadcastIP(ip, prefixLen); 
                     if (broadcastIP != -1) {
-                        chrome.socket.sendTo(socketId, buf, broadcastIP, 137, function (result) {
+                        var cBroadcastIP = broadcastIP;
+                        chrome.socket.sendTo(socketId, buf, cBroadcastIP, 137, function (result) {
                             if (result.bytesWritten < 0) {
                                 console.log("nbtSearch error:" + result.bytesWritten);      
                             } else {
@@ -337,7 +338,7 @@ function nbtBroadcast(buf, sendToCallback) {
                                 
                                 // Do it again in a bit
                                 setTimeout(function() {
-                                    chrome.socket.sendTo(socketId, buf, broadcastIP, 137, function (result) {});
+                                    chrome.socket.sendTo(socketId, buf, cBroadcastIP, 137, function (result) {});
                                 }, 1000 + (Math.random() * 1000));
                                 
                                 //nbtWildcardSearchRecvLoop(socketId, deviceFoundCallback);

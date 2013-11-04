@@ -27,7 +27,12 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
     }
     
     if (port) {
-        port.postMessage({inputEntered: text});
+        try {
+            port.postMessage({inputEntered: text});
+        } catch (err) {
+            alert("Unable to contact Network Devices App. Please re-install it.")
+            port = null;
+        }
     }
 
     // chrome.runtime.sendMessage(SMB_APP_ID, {inputEntered: text}, function(response) {
