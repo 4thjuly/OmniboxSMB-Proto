@@ -336,7 +336,7 @@ function nbtBroadcast(buf, sendToCallback) {
                             } else {
                                 console.log("nbtSearch wrote:" + result.bytesWritten);
                                 
-                                // Do it again in a bit
+                                // Do it again in a bit since udp is unreliable
                                 setTimeout(function() {
                                     chrome.socket.sendTo(socketId, buf, cBroadcastIP, 137, function (result) {});
                                 }, 1000 + (Math.random() * 1000));
